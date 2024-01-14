@@ -6,7 +6,6 @@ import {
   sync$,
   $,
   useSignal,
-  useTask$,
 } from "@builder.io/qwik";
 import {
   getIntialIndexOnKey,
@@ -14,7 +13,6 @@ import {
   getPrevEnabledOptionIndexFromDisabledArr,
   houseKeepToggle,
   setTriggerText,
-  toggleHiglightClass,
 } from "./utils/utils";
 import SelectContextId from "./select-context-id";
 
@@ -61,6 +59,21 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
       if (e.key === "Enter") {
         setTriggerText(indexHiglightSig, elemArr, context);
         return;
+      }
+      if (e.key === "Home") {
+        const firstOpt = disabledArr.findIndex((e) => e.disabled === false);
+        houseKeepToggle(firstOpt, indexHiglightSig, elemArr);
+      }
+      if (e.key === "End") {
+        // the things we do when no lastIndex :(
+        for (let index = disabledArr.length - 1; index > -1; index--) {
+          const elementStatus = disabledArr[index];
+          if (!elementStatus.disabled) {
+            houseKeepToggle(index, indexHiglightSig, elemArr);
+            indexHiglightSig.value = index;
+            break;
+          }
+        }
       }
     }
   });
