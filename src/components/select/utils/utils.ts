@@ -1,4 +1,5 @@
 import { Signal } from "@builder.io/qwik";
+import { SelectContext } from "../select-context.type";
 
 export const getNextEnabledOptionIndexFromDisabledArr = (
   currentIndex: number,
@@ -50,7 +51,7 @@ export const getIntialIndexOnKey = (key: string): number => {
 };
 
 // this is done more inline with how W3C does it, but class could be change for attributes too
-export const toggleHiglightClass = (
+const toggleHiglightClass = (
   prevIndex: number,
   currentIndex: number,
   elemArr: (HTMLLIElement | undefined)[],
@@ -82,4 +83,14 @@ export const houseKeepToggle = (
   const prevIndex = indexSig.value;
   toggleHiglightClass(prevIndex, currentIndex, elemArr);
   indexSig.value = currentIndex;
+};
+
+export const setTriggerText = (
+  indexSig: Signal<number>,
+  elemArr: (HTMLLIElement | undefined)[],
+  selectContext: SelectContext,
+) => {
+  const highlightElem = elemArr[indexSig.value];
+  const strg = highlightElem!.innerText;
+  selectContext.triggerRef.value!.innerText = strg;
 };

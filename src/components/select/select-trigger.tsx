@@ -13,16 +13,15 @@ import {
   getNextEnabledOptionIndexFromDisabledArr,
   getPrevEnabledOptionIndexFromDisabledArr,
   houseKeepToggle,
+  setTriggerText,
   toggleHiglightClass,
 } from "./utils/utils";
 import SelectContextId from "./select-context-id";
 
 type SelectTriggerProps = PropsOf<"button">;
-type DisabledArr = Array<{ disabled: boolean }>;
 export const SelectTrigger = component$<SelectTriggerProps>((props) => {
   const context = useContext(SelectContextId);
   const indexHiglightSig = useSignal(-1);
-  const disabledArrSig = useSignal<DisabledArr>([]);
   const handleClick$ = $(() => {
     context.isListboxOpenSig.value = !context.isListboxOpenSig.value;
   });
@@ -58,6 +57,10 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
           disabledArr,
         );
         houseKeepToggle(nextIndex, indexHiglightSig, elemArr);
+        return;
+      }
+      if (e.key === "Enter") {
+        setTriggerText(indexHiglightSig, elemArr, context);
         return;
       }
     }
