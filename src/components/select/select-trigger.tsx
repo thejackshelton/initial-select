@@ -82,6 +82,9 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
         context.isListboxOpenSig.value = false;
         return;
       }
+      if (e.key === "Escape") {
+        context.isListboxOpenSig.value = false;
+      }
     }
   });
 
