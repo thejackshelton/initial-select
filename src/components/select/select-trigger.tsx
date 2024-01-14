@@ -78,7 +78,9 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
         return;
       }
       if (e.key === "Tab") {
-        setTriggerText(indexHiglightSig, elemArr, context);
+        const tabIndex =
+          indexHiglightSig.value === -1 ? 0 : indexHiglightSig.value;
+        setTriggerText({ value: tabIndex }, elemArr, context);
         context.isListboxOpenSig.value = false;
         return;
       }
