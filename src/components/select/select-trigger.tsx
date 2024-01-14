@@ -63,6 +63,7 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
       if (e.key === "Home") {
         const firstOpt = disabledArr.findIndex((e) => e.disabled === false);
         houseKeepToggle(firstOpt, indexHiglightSig, elemArr);
+        return;
       }
       if (e.key === "End") {
         // the things we do when no lastIndex :(
@@ -74,6 +75,12 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
             break;
           }
         }
+        return;
+      }
+      if (e.key === "Tab") {
+        setTriggerText(indexHiglightSig, elemArr, context);
+        context.isListboxOpenSig.value = false;
+        return;
       }
     }
   });
