@@ -15,7 +15,7 @@ export const SelectOption = component$<SelectOptionProps>((props) => {
   const context = useContext(SelectContextId);
   const localIndexSig = useSignal<number | null>(null);
   const optionRef = useSignal<HTMLLIElement>();
-
+  const className = "border-black border-2";
   const handleClick$ = $(() => {
     context.selectedIndexSig.value = localIndexSig.value;
     context.isListboxOpenSig.value = false;
