@@ -49,6 +49,11 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
         return;
       }
       if (e.key === "ArrowUp") {
+        if (indexHiglightSig.value === -1) {
+          const initalIndex = getIntialIndexOnKey(e.key);
+          houseKeepToggle(initalIndex, indexHiglightSig, elemArr);
+          return;
+        }
         const nextIndex = getPrevEnabledOptionIndexFromDisabledArr(
           indexHiglightSig.value,
           disabledArr,
