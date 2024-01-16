@@ -1,5 +1,6 @@
 import { Signal } from "@builder.io/qwik";
 import { SelectContext } from "../select-context.type";
+import { DisabledArr } from "../select-trigger";
 
 export const getNextEnabledOptionIndexFromDisabledArr = (
   currentIndex: number,
@@ -7,7 +8,9 @@ export const getNextEnabledOptionIndexFromDisabledArr = (
 ): number => {
   let offset = 1;
   const len = disabledArr.length;
-
+  if (currentIndex === -1) {
+    console.log("n 1");
+  }
   while (disabledArr[(currentIndex + offset) % len]?.disabled) {
     offset++;
     if (offset + currentIndex > len - 1) {
@@ -93,4 +96,45 @@ export const setTriggerText = (
   const highlightElem = elemArr[indexSig.value];
   const strg = highlightElem!.innerText;
   selectContext.triggerRef.value!.innerText = strg;
+};
+
+export const singleCharSearch = (
+  char: string,
+  deltaIndex: Signal<number>,
+  elemArr: (HTMLLIElement | undefined)[],
+): number => {
+  const availableOptions = elemArr.filter(
+    (option) => !(option?.getAttribute("aria-disabled") === "true"),
+  );
+  if (availableOptions[0] === undefined) {
+    return -1;
+  }
+  const charOptions = availableOptions.map((e) => {
+    return e!.textContent!.slice(0, 1).toLowerCase();
+  });
+  const charIndex = charOptions.indexOf(char);
+  if (charIndex === -1) {
+    return -1;
+  }
+  if (deltaIndex.value === -1) {
+    const elemIndex = elemArr.indexOf(availableOptions[charIndex]);
+    deltaIndex.value = elemIndex + 1;
+    return elemIndex;
+  }
+  const isRepeat = charOptions[deltaIndex.value - 1] === char;
+  if (isRepeat) {
+    const nextChars = charOptions.slice(deltaIndex.value);
+    const repeatIndex = nextChars.indexOf(char);
+    if (repeatIndex !== -1) {
+      console.log("repeating");
+      const nextElemIndex =
+        elemArr.indexOf(availableOptions[repeatIndex]) + deltaIndex.value;
+      deltaIndex.value = nextElemIndex + 1;
+      return nextElemIndex;
+    }
+    const elemIndex = elemArr.indexOf(availableOptions[charIndex]);
+    deltaIndex.value = elemIndex + 1;
+    return elemIndex;
+  }
+  return -1;
 };
