@@ -8,9 +8,6 @@ export const getNextEnabledOptionIndexFromDisabledArr = (
 ): number => {
   let offset = 1;
   const len = disabledArr.length;
-  if (currentIndex === -1) {
-    console.log("n 1");
-  }
   while (disabledArr[(currentIndex + offset) % len]?.disabled) {
     offset++;
     if (offset + currentIndex > len - 1) {
@@ -107,12 +104,15 @@ export const singleCharSearch = (
     (option) => !(option?.getAttribute("aria-disabled") === "true"),
   );
   if (availableOptions[0] === undefined) {
+    console.log("undefined");
+
     return -1;
   }
   const charOptions = availableOptions.map((e) => {
     return e!.textContent!.slice(0, 1).toLowerCase();
   });
   const charIndex = charOptions.indexOf(char);
+
   if (charIndex === -1) {
     return -1;
   }
@@ -122,19 +122,25 @@ export const singleCharSearch = (
     return elemIndex;
   }
   const isRepeat = charOptions[deltaIndex.value - 1] === char;
+
   if (isRepeat) {
     const nextChars = charOptions.slice(deltaIndex.value);
     const repeatIndex = nextChars.indexOf(char);
     if (repeatIndex !== -1) {
-      console.log("repeating");
-      const nextElemIndex =
-        elemArr.indexOf(availableOptions[repeatIndex]) + deltaIndex.value;
-      deltaIndex.value = nextElemIndex + 1;
+      const nextIndex = repeatIndex + deltaIndex.value;
+      const nextElem = availableOptions[nextIndex];
+      const nextElemIndex = elemArr.indexOf(nextElem);
+      deltaIndex.value = nextIndex + 1;
       return nextElemIndex;
     }
     const elemIndex = elemArr.indexOf(availableOptions[charIndex]);
     deltaIndex.value = elemIndex + 1;
     return elemIndex;
   }
+  const elemIndex = elemArr.indexOf(availableOptions[charIndex]);
+  deltaIndex.value = elemIndex + 1;
+  return elemIndex;
+  console.log("bucko");
+
   return -1;
 };

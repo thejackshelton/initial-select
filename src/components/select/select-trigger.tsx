@@ -38,8 +38,6 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
       return { disabled: e?.getAttribute("aria-disabled") === "true" };
     });
 
-    console.log("should open lol ", shouldOpen, closedPopup);
-
     const singleChar = /^[a-z]$/;
     const isSinglChar = singleChar.test(e.key);
     // TODO: refactor each if statement with a function inside of it instead of the current pattern of:
@@ -56,7 +54,6 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
       return;
     }
     if (shouldOpen) {
-      console.log("chaning 1");
       context.isListboxOpenSig.value = true;
       const initalIndex = getIntialIndexOnKey(e.key);
       houseKeepToggle(initalIndex, indexHiglightSig, elemArr);
@@ -64,12 +61,17 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
     }
     if (context.isListboxOpenSig.value) {
       lettersTyped.value = lettersTyped.value + e.key;
-      console.log("so far: ", lettersTyped.value);
       if (isSinglChar) {
+        console.log("we love regex");
         const posIndex = singleCharSearch(e.key, deltaIndexSig, elemArr);
         if (posIndex !== -1) {
+          console.log("new valll ", posIndex);
           houseKeepToggle(posIndex, indexHiglightSig, elemArr);
+          return;
         }
+
+        console.log("messed up ", posIndex);
+        return;
       }
       if (e.key === "ArrowDown") {
         const nextIndex = getNextEnabledOptionIndexFromDisabledArr(
