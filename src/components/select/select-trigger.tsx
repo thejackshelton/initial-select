@@ -40,6 +40,21 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
 
     console.log("should open lol ", shouldOpen, closedPopup);
 
+    const singleChar = /^[a-z]$/;
+    const isSinglChar = singleChar.test(e.key);
+    // TODO: refactor each if statement with a function inside of it instead of the current pattern of:
+    // if(true){lines of code}
+    //to
+    //if(true){fun(...)}
+
+    if (closedPopup && isSinglChar) {
+      context.isListboxOpenSig.value = true;
+      const posIndex = singleCharSearch(e.key, deltaIndexSig, elemArr);
+      if (posIndex !== -1) {
+        houseKeepToggle(posIndex, indexHiglightSig, elemArr);
+      }
+      return;
+    }
     if (shouldOpen) {
       console.log("chaning 1");
       context.isListboxOpenSig.value = true;
@@ -50,8 +65,7 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
     if (context.isListboxOpenSig.value) {
       lettersTyped.value = lettersTyped.value + e.key;
       console.log("so far: ", lettersTyped.value);
-      const singleChar = /^[a-z]$/;
-      if (singleChar.test(e.key)) {
+      if (isSinglChar) {
         const posIndex = singleCharSearch(e.key, deltaIndexSig, elemArr);
         if (posIndex !== -1) {
           houseKeepToggle(posIndex, indexHiglightSig, elemArr);
