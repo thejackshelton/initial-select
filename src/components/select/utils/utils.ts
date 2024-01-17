@@ -140,7 +140,4 @@ export const singleCharSearch = (
   const elemIndex = elemArr.indexOf(availableOptions[charIndex]);
   deltaIndex.value = elemIndex + 1;
   return elemIndex;
-  console.log("bucko");
-
-  return -1;
 };

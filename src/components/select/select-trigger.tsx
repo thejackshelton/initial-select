@@ -45,13 +45,35 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
     //to
     //if(true){fun(...)}
 
-    if (closedPopup && isSinglChar) {
-      context.isListboxOpenSig.value = true;
-      const posIndex = singleCharSearch(e.key, deltaIndexSig, elemArr);
-      if (posIndex !== -1) {
-        houseKeepToggle(posIndex, indexHiglightSig, elemArr);
+    // this whole section in the if statement could be refactored into a "closed behavior" fn
+    if (closedPopup) {
+      if (isSinglChar) {
+        context.isListboxOpenSig.value = true;
+        const posIndex = singleCharSearch(e.key, deltaIndexSig, elemArr);
+        if (posIndex !== -1) {
+          houseKeepToggle(posIndex, indexHiglightSig, elemArr);
+        }
+        return;
       }
-      return;
+
+      if (e.key === "Home") {
+        context.isListboxOpenSig.value = true;
+        const firstOpt = disabledArr.findIndex((e) => e.disabled === false);
+        houseKeepToggle(firstOpt, indexHiglightSig, elemArr);
+        return;
+      }
+      if (e.key === "End") {
+        context.isListboxOpenSig.value = true;
+        for (let index = disabledArr.length - 1; index > -1; index--) {
+          const elementStatus = disabledArr[index];
+          if (!elementStatus.disabled) {
+            houseKeepToggle(index, indexHiglightSig, elemArr);
+            indexHiglightSig.value = index;
+            break;
+          }
+        }
+        return;
+      }
     }
     if (shouldOpen) {
       context.isListboxOpenSig.value = true;
@@ -62,15 +84,11 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
     if (context.isListboxOpenSig.value) {
       lettersTyped.value = lettersTyped.value + e.key;
       if (isSinglChar) {
-        console.log("we love regex");
         const posIndex = singleCharSearch(e.key, deltaIndexSig, elemArr);
         if (posIndex !== -1) {
-          console.log("new valll ", posIndex);
           houseKeepToggle(posIndex, indexHiglightSig, elemArr);
           return;
         }
-
-        console.log("messed up ", posIndex);
         return;
       }
       if (e.key === "ArrowDown") {
