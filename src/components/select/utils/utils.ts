@@ -1,6 +1,5 @@
-import { Signal } from "@builder.io/qwik";
-import { SelectContext } from "../select-context.type";
-import { DisabledArr } from "../select-trigger";
+import { type Signal } from "@builder.io/qwik";
+import { type SelectContext } from "../select-context.type";
 
 export const getNextEnabledOptionIndexFromDisabledArr = (
   currentIndex: number,
@@ -40,10 +39,10 @@ export const getPrevEnabledOptionIndexFromDisabledArr = (
 };
 
 export const getIntialIndexOnKey = (key: string): number => {
-  // in the future, many options will need to select fist option
+  // in the future, many options will need to select first option
   // we also might need to filter for disbled items
-  const sendFistOption = ["ArrowDown", "ArrowUp"];
-  const shouldBeFirstOption = sendFistOption.includes(key);
+  const sendFirstOption = ["ArrowDown", "ArrowUp"];
+  const shouldBeFirstOption = sendFirstOption.includes(key);
   if (shouldBeFirstOption) {
     return 0;
   }
@@ -75,7 +74,7 @@ const toggleHiglightClass = (
 };
 
 // this fn could be replaced by checking in each option instead, just went for W3C
-export const houseKeepToggle = (
+export const manageToggle = (
   currentIndex: number,
   indexSig: Signal<number>,
   elemArr: (HTMLLIElement | undefined)[],

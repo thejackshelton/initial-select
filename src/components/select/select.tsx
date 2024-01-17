@@ -25,7 +25,7 @@ export const Select = component$<SelectProps>((props) => {
   const selectedOptionRef = useSignal<HTMLLIElement | null>(null);
   const isListboxOpenSig = useSignal<boolean>(false);
 
-  useComputed$(function deriveSelectedOption() {
+  useComputed$(function deriveSelectedOptionRef() {
     if (selectedIndexSig.value !== null) {
       selectedOptionRef.value =
         optionRefsArray.value[selectedIndexSig.value].value;
