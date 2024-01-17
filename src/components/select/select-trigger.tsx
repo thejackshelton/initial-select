@@ -77,6 +77,9 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
     }
     if (shouldOpen) {
       context.isListboxOpenSig.value = true;
+      if (indexHiglightSig.value !== -1) {
+        return;
+      }
       const initalIndex = getIntialIndexOnKey(e.key);
       houseKeepToggle(initalIndex, indexHiglightSig, elemArr);
       return;
