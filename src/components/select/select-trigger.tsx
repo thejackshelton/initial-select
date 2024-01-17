@@ -75,6 +75,9 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
     }
     if (!context.isListboxOpenSig.value && openPopupKeys.includes(e.key)) {
       context.isListboxOpenSig.value = true;
+      if (indexHiglightSig.value !== -1) {
+        return;
+      }
       const initalIndex = getIntialIndexOnKey(e.key);
       manageToggle(initalIndex, highlightedIndexSig, elemArr);
       return;
