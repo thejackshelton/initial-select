@@ -7,7 +7,7 @@ import {
   $,
   useSignal,
 } from "@builder.io/qwik";
-import { useSelect } from "./utils/utils";
+import { useSelect } from "./use-select";
 import SelectContextId from "./select-context-id";
 
 type SelectTriggerProps = PropsOf<"button">;
@@ -117,7 +117,7 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
         return;
       }
       if (e.key === "Enter") {
-        setTriggerText(highlightedIndexSig, elemArr, context);
+        setTriggerText(highlightedIndexSig, elemArr);
         return;
       }
       if (e.key === "Home") {
@@ -140,7 +140,7 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
       if (e.key === "Tab") {
         const tabIndex =
           highlightedIndexSig.value === -1 ? 0 : highlightedIndexSig.value;
-        setTriggerText({ value: tabIndex }, elemArr, context);
+        setTriggerText({ value: tabIndex }, elemArr);
         context.isListboxOpenSig.value = false;
         return;
       }

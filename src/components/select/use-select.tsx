@@ -1,7 +1,9 @@
-import { $, type Signal } from "@builder.io/qwik";
-import { type SelectContext } from "../select-context.type";
+import { $, useContext, type Signal } from "@builder.io/qwik";
+import SelectContextId from "./select-context-id";
 
 export function useSelect() {
+  const context = useContext(SelectContextId);
+
   const getNextEnabledOptionIndexFromDisabledArr = $(
     (
       currentIndex: number,
@@ -94,11 +96,10 @@ export function useSelect() {
     (
       indexSig: Signal<number>,
       elemArr: (HTMLLIElement | undefined)[],
-      selectContext: SelectContext,
     ) => {
       const highlightElem = elemArr[indexSig.value];
       const strg = highlightElem!.innerText;
-      selectContext.triggerRef.value!.innerText = strg;
+      context.triggerRef.value!.innerText = strg;
     },
   );
 
