@@ -24,6 +24,12 @@ export const SelectOption = component$<SelectOptionProps>((props) => {
     // assigns a local index according to the array length
     localIndexSig.value = context.optionRefsArray.value.length;
 
+    // getting correct indexes (server matching client)
+    // context.optionIndexesSig.value = [
+    //   ...context.optionIndexesSig.value,
+    //   localIndexSig.value,
+    // ];
+
     // pushing in refs
     context.optionRefsArray.value = [
       ...context.optionRefsArray.value,
