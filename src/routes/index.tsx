@@ -6,7 +6,7 @@ import { SelectListbox } from "~/components/select/select-listbox";
 import { SelectOption } from "~/components/select/select-option";
 import { SelectTrigger } from "~/components/select/select-trigger";
 
-const mockUsers = ["Tim", "Ryan"];
+const mockUsers = ["Tim", "Ryan", "Jim"];
 
 const moreUsers = ["Carla", "Rachel", "Monica", "Jessie", "Abby"];
 
