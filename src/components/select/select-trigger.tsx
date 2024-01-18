@@ -24,12 +24,13 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
 
   const context = useContext(SelectContextId);
   const highlightedIndexSig = useSignal(-1);
+  const typedLettersSig = useSignal("");
+  const deltaIndexSig = useSignal(-1);
+
   const handleClick$ = $(() => {
     context.isListboxOpenSig.value = !context.isListboxOpenSig.value;
   });
 
-  const typedLettersSig = useSignal("");
-  const deltaIndexSig = useSignal(-1);
   const handleKeyDown$ = $(async (e: KeyboardEvent) => {
     // we migth want to consider making a ts type just for the strgs we care about
     // in the future, multiple keys need to open the popup
@@ -39,8 +40,8 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
       return { disabled: e?.getAttribute("aria-disabled") === "true" };
     });
 
-    const singleChar = /^[a-z]$/;
-    const isSingleChar = singleChar.test(e.key);
+    const singleCharRegex = /^[a-z]$/;
+    const isSingleChar = singleCharRegex.test(e.key);
     // TODO: refactor each if statement with a function inside of it instead of the current pattern of:
     // if(true){lines of code}
     //to

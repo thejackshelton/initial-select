@@ -14,8 +14,6 @@ export default component$(() => {
     usersSig.value = users;
   });
 
-  console.log(usersSig);
-
   return (
     <div style={{ height: "1000px" }}>
       <Select>

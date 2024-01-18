@@ -9,7 +9,6 @@ import {
 } from "@builder.io/qwik";
 import { type SelectContext } from "./select-context.type";
 import SelectContextId from "./select-context-id";
-import { isBrowser } from "@builder.io/qwik/build";
 
 type SelectProps = PropsOf<"div">;
 
@@ -20,7 +19,6 @@ export const Select = component$<SelectProps>((props) => {
   const popoverRef = useSignal<HTMLElement>();
   const listboxRef = useSignal<HTMLUListElement>();
   const optionRefsArray = useSignal<Signal<HTMLLIElement>[]>([]);
-  const optionElementsSig = useSignal<HTMLLIElement[] | undefined>([]);
 
   // core state
   const selectedIndexSig = useSignal<number | null>(null);
@@ -33,14 +31,6 @@ export const Select = component$<SelectProps>((props) => {
     if (selectedIndexSig.value !== null) {
       selectedOptionRef.value =
         optionRefsArray.value[selectedIndexSig.value].value;
-    }
-  });
-
-  useTask$(function deriveElements({ track }) {
-    track(() => isListboxOpenSig.value);
-
-    if (isBrowser) {
-      optionElementsSig.value = optionRefsArray.value.map((ref) => ref.value);
     }
   });
 
