@@ -7,27 +7,30 @@ import {
   $,
   useSignal,
 } from "@builder.io/qwik";
-import {
-  getIntialIndexOnKey,
-  getNextEnabledOptionIndexFromDisabledArr,
-  getPrevEnabledOptionIndexFromDisabledArr,
-  manageToggle,
-  setTriggerText,
-  singleCharSearch,
-} from "./utils/utils";
+import { useSelect } from "./utils/utils";
 import SelectContextId from "./select-context-id";
 
 type SelectTriggerProps = PropsOf<"button">;
 export type DisabledArr = Array<{ disabled: boolean }>;
 export const SelectTrigger = component$<SelectTriggerProps>((props) => {
+  const {
+    getNextEnabledOptionIndexFromDisabledArr,
+    getPrevEnabledOptionIndexFromDisabledArr,
+    getIntialIndexOnKey,
+    manageToggle,
+    setTriggerText,
+    singleCharSearch,
+  } = useSelect();
+
   const context = useContext(SelectContextId);
   const highlightedIndexSig = useSignal(-1);
   const handleClick$ = $(() => {
     context.isListboxOpenSig.value = !context.isListboxOpenSig.value;
   });
+
   const typedLettersSig = useSignal("");
   const deltaIndexSig = useSignal(-1);
-  const handleKeyDown$ = $((e: KeyboardEvent) => {
+  const handleKeyDown$ = $(async (e: KeyboardEvent) => {
     // we migth want to consider making a ts type just for the strgs we care about
     // in the future, multiple keys need to open the popup
     const openPopupKeys = ["ArrowDown", "ArrowUp"];
@@ -47,7 +50,7 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
     if (!context.isListboxOpenSig.value) {
       if (isSingleChar) {
         context.isListboxOpenSig.value = true;
-        const posIndex = singleCharSearch(e.key, deltaIndexSig, elemArr);
+        const posIndex = await singleCharSearch(e.key, deltaIndexSig, elemArr);
         if (posIndex !== -1) {
           manageToggle(posIndex, highlightedIndexSig, elemArr);
         }
@@ -75,17 +78,17 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
     }
     if (!context.isListboxOpenSig.value && openPopupKeys.includes(e.key)) {
       context.isListboxOpenSig.value = true;
-      if (indexHiglightSig.value !== -1) {
+      if (highlightedIndexSig.value !== -1) {
         return;
       }
       const initalIndex = getIntialIndexOnKey(e.key);
-      manageToggle(initalIndex, highlightedIndexSig, elemArr);
+      manageToggle(await initalIndex, highlightedIndexSig, elemArr);
       return;
     }
     if (context.isListboxOpenSig.value) {
       typedLettersSig.value = typedLettersSig.value + e.key;
       if (isSingleChar) {
-        const posIndex = singleCharSearch(e.key, deltaIndexSig, elemArr);
+        const posIndex = await singleCharSearch(e.key, deltaIndexSig, elemArr);
         if (posIndex !== -1) {
           manageToggle(posIndex, highlightedIndexSig, elemArr);
           return;
@@ -97,20 +100,20 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
           highlightedIndexSig.value,
           disabledArr,
         );
-        manageToggle(nextIndex, highlightedIndexSig, elemArr);
+        manageToggle(await nextIndex, highlightedIndexSig, elemArr);
         return;
       }
       if (e.key === "ArrowUp") {
         if (highlightedIndexSig.value === -1) {
           const initalIndex = getIntialIndexOnKey(e.key);
-          manageToggle(initalIndex, highlightedIndexSig, elemArr);
+          manageToggle(await initalIndex, highlightedIndexSig, elemArr);
           return;
         }
         const nextIndex = getPrevEnabledOptionIndexFromDisabledArr(
           highlightedIndexSig.value,
           disabledArr,
         );
-        manageToggle(nextIndex, highlightedIndexSig, elemArr);
+        manageToggle(await nextIndex, highlightedIndexSig, elemArr);
         return;
       }
       if (e.key === "Enter") {
