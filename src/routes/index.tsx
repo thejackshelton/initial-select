@@ -1,11 +1,20 @@
-import { $, component$, useSignal, useTask$ } from "@builder.io/qwik";
+import {
+  $,
+  component$,
+  useSignal,
+  useStyles$,
+  useTask$,
+} from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { SelectListbox } from "~/components/select/select-listbox";
 import { SelectOption } from "~/components/select/select-option";
 import { SelectTrigger } from "~/components/select/select-trigger";
 import { Select } from "~/components/select/select-inline";
+import styles from "~/components/select/select.css?inline";
 
 export default component$(() => {
+  useStyles$(styles);
+
   const mockUsers = ["Tim", "Ryan", "Jim"];
   const moreUsers = ["Carla", "Rachel", "Monica", "Jessie", "Abby"];
 
@@ -26,6 +35,7 @@ export default component$(() => {
         <SelectListbox
           style={{ padding: "0px", margin: "0px", listStyle: "none" }}
         >
+          <SelectOption disabled>My option</SelectOption>
           {usersSig.value.map((user) => (
             <SelectOption key={user}>{user}</SelectOption>
           ))}

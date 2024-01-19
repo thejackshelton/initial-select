@@ -11,15 +11,20 @@ import SelectContextId from "./select-context";
 
 type SelectOptionProps = PropsOf<"li"> & {
   index?: number;
+  disabled?: boolean;
 };
 
 export const SelectOption = component$<SelectOptionProps>((props) => {
   /* look at select-inline on how we get the index. */
-  const { index, ...rest } = props;
-
+  const { index, disabled, ...rest } = props;
   const context = useContext(SelectContextId);
   const optionRef = useSignal<HTMLLIElement>();
   const localIndexSig = useSignal<number | null>(null);
+
+  const isHighlighted =
+    !disabled && context.highlightedIndexSig.value === index;
+  const isSelected = !disabled && context.selectedIndexSig.value === index;
+
   useTask$(function getIndexTask() {
     if (index === undefined)
       throw Error(
@@ -32,21 +37,32 @@ export const SelectOption = component$<SelectOptionProps>((props) => {
   });
 
   const handleClick$ = $(() => {
+    if (disabled) return;
+
     context.selectedIndexSig.value = localIndexSig.value;
     context.isListboxOpenSig.value = false;
   });
 
-  // const handlePointerOver$ = $(() => {
-  //   context.highlightedIndexSig.value = localIndexSig.value;
-  // });
+  const handlePointerOver$ = $(() => {
+    if (disabled) return;
+
+    if (localIndexSig.value !== null) {
+      context.highlightedIndexSig.value = localIndexSig.value;
+    }
+  });
 
   return (
     <li
-      onClick$={[handleClick$, props.onClick$]}
       {...rest}
+      onClick$={[handleClick$, props.onClick$]}
+      onPointerOver$={[handlePointerOver$, props.onPointerOver$]}
       ref={optionRef}
       tabIndex={-1}
-      aria-selected={localIndexSig.value === context.selectedIndexSig.value}
+      aria-selected={isSelected}
+      data-selected={isSelected}
+      data-highlighted={isHighlighted}
+      data-disabled={disabled}
+      role="option"
     >
       <Slot />
     </li>

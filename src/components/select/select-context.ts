@@ -6,7 +6,6 @@ const SelectContextId = createContextId<SelectContext>("Select");
 
 export default SelectContextId;
 
-
 export type SelectContext = {
   // refs
   triggerRef: Signal<HTMLButtonElement | undefined>;

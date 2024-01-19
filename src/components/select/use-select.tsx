@@ -4,14 +4,15 @@ import SelectContextId from "./select-context";
 export function useSelect() {
   const context = useContext(SelectContextId);
 
-  const getNextEnabledOptionIndexFromDisabledArr = $(
-    (
-      currentIndex: number,
-      disabledArr: Array<{ disabled: boolean }>,
-    ): number => {
+  const getNextEnabledOptionIndex = $(
+    (index: number, options: HTMLElement[]) => {
       let offset = 1;
-      const len = disabledArr.length;
-      while (disabledArr[(currentIndex + offset) % len]?.disabled) {
+      let currentIndex = index;
+      const len = options.length;
+
+      while (
+        (options[(currentIndex + offset) % len] as HTMLOptionElement).disabled
+      ) {
         offset++;
         if (offset + currentIndex > len - 1) {
           currentIndex = 0;
@@ -27,11 +28,14 @@ export function useSelect() {
     },
   );
 
-  const getPrevEnabledOptionIndexFromDisabledArr = $(
-    (currentIndex: number, disabledArr: Array<{ disabled: boolean }>) => {
+  const getPrevEnabledOptionIndex = $(
+    (index: number, options: HTMLElement[]) => {
       let offset = 1;
-      const len = disabledArr.length;
-      while (disabledArr[(currentIndex - offset + len) % len]?.disabled) {
+      let currentIndex = index;
+      const len = options.length;
+      while (
+        (options[(currentIndex + offset) % len] as HTMLOptionElement).disabled
+      ) {
         offset++;
         if (currentIndex - offset < 0) {
           currentIndex = len - 1;
@@ -150,8 +154,8 @@ export function useSelect() {
   );
 
   return {
-    getNextEnabledOptionIndexFromDisabledArr,
-    getPrevEnabledOptionIndexFromDisabledArr,
+    getNextEnabledOptionIndex,
+    getPrevEnabledOptionIndex,
     getIntialIndexOnKey,
     manageToggle,
     setTriggerText,
