@@ -9,9 +9,14 @@ import {
 } from "@builder.io/qwik";
 import SelectContextId from "./select-context-id";
 
-type SelectOptionProps = PropsOf<"li">;
+type SelectOptionProps = PropsOf<"li"> & {
+  index?: number;
+};
 
 export const SelectOption = component$<SelectOptionProps>((props) => {
+  /* look at select-inline on how we get the index. */
+  const { index, ...rest } = props;
+
   const context = useContext(SelectContextId);
   const localIndexSig = useSignal<number | null>(null);
   const optionRef = useSignal<HTMLLIElement>();
@@ -21,26 +26,20 @@ export const SelectOption = component$<SelectOptionProps>((props) => {
   });
 
   useTask$(function getIndexTask() {
-    // assigns a local index according to the array length
-    localIndexSig.value = context.optionRefsArray.value.length;
+    if (index === undefined)
+      throw Error(
+        "Qwik UI: Select component option cannot find its proper index.",
+      );
 
-    // getting correct indexes (server matching client)
-    // context.optionIndexesSig.value = [
-    //   ...context.optionIndexesSig.value,
-    //   localIndexSig.value,
-    // ];
+    localIndexSig.value = index;
 
-    // pushing in refs
-    context.optionRefsArray.value = [
-      ...context.optionRefsArray.value,
-      optionRef,
-    ];
+    context.optionRefsArray.value[index] = optionRef;
   });
 
   return (
     <li
       onClick$={[handleClick$, props.onClick$]}
-      {...props}
+      {...rest}
       ref={optionRef}
       tabIndex={-1}
       aria-selected={localIndexSig.value === context.selectedIndexSig.value}

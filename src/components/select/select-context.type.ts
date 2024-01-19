@@ -9,7 +9,6 @@ export type SelectContext = {
   // core state
   optionRefsArray: Signal<Array<Signal<HTMLLIElement | undefined>>>;
   optionElementsSig: Signal<Array<HTMLLIElement> | null>;
-  // optionIndexesSig: Signal<Array<number>>;
   isListboxOpenSig: Signal<boolean>;
   selectedIndexSig: Signal<number | null>;
 };

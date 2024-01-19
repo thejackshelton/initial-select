@@ -1,10 +1,10 @@
 import { $, component$, useSignal, useTask$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { isBrowser } from "@builder.io/qwik/build";
-import { Select } from "~/components/select/select";
 import { SelectListbox } from "~/components/select/select-listbox";
 import { SelectOption } from "~/components/select/select-option";
 import { SelectTrigger } from "~/components/select/select-trigger";
+import { Select } from "~/components/select/select-inline";
 
 const mockUsers = ["Tim", "Ryan", "Jim"];
 

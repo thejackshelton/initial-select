@@ -9,11 +9,10 @@ import {
 } from "@builder.io/qwik";
 import { type SelectContext } from "./select-context.type";
 import SelectContextId from "./select-context-id";
-import { isServer } from "@builder.io/qwik/build";
 
-type SelectProps = PropsOf<"div">;
+export type SelectProps = PropsOf<"div">;
 
-export const Select = component$<SelectProps>((props) => {
+export const SelectImpl = component$<SelectProps>((props) => {
   // refs
   const rootRef = useSignal<HTMLDivElement>();
   const triggerRef = useSignal<HTMLButtonElement>();
@@ -23,7 +22,6 @@ export const Select = component$<SelectProps>((props) => {
   /* 
     while this may seem unnecessary, Qwik renders without knowledge of its parents or children. As a result, we need to increment our option indexes alongside our options to get the proper index on the client. 
   */
-  const optionIndexesSig = useSignal<number[]>([]);
   const optionRefsArray = useSignal<Signal<HTMLLIElement>[]>([]);
   const optionElementsSig = useSignal<HTMLLIElement[] | null>(null);
 
@@ -47,14 +45,11 @@ export const Select = component$<SelectProps>((props) => {
     isFirstOpenSig.value && track(() => isListboxOpenSig.value);
     isFirstOpenSig.value = false;
 
-    if (isServer) return;
-
     /* if the user has added more options */
     track(() => optionRefsArray.value);
 
     optionElementsSig.value = optionRefsArray.value.map((o) => o.value);
     console.log(optionElementsSig.value.map((o) => o.textContent));
-    console.log(optionIndexesSig.value);
   });
 
   const context: SelectContext = {
@@ -63,7 +58,6 @@ export const Select = component$<SelectProps>((props) => {
     listboxRef,
     selectedOptionRef,
     optionRefsArray,
-    // optionIndexesSig,
     optionElementsSig,
     isListboxOpenSig,
     selectedIndexSig,
