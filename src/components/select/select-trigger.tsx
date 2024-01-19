@@ -23,7 +23,6 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
   } = useSelect();
 
   const context = useContext(SelectContextId);
-  const highlightedIndexSig = useSignal(-1);
   const typedLettersSig = useSignal("");
   const deltaIndexSig = useSignal(-1);
 
@@ -53,7 +52,7 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
         context.isListboxOpenSig.value = true;
         const posIndex = await singleCharSearch(e.key, deltaIndexSig, elemArr);
         if (posIndex !== -1) {
-          manageToggle(posIndex, highlightedIndexSig, elemArr);
+          manageToggle(posIndex, context.highlightedIndexSig, elemArr);
         }
         return;
       }
@@ -61,7 +60,7 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
       if (e.key === "Home") {
         context.isListboxOpenSig.value = true;
         const firstOpt = disabledArr.findIndex((e) => e.disabled === false);
-        manageToggle(firstOpt, highlightedIndexSig, elemArr);
+        manageToggle(firstOpt, context.highlightedIndexSig, elemArr);
         return;
       }
       if (e.key === "End") {
@@ -69,8 +68,8 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
         for (let index = disabledArr.length - 1; index > -1; index--) {
           const elementStatus = disabledArr[index];
           if (!elementStatus.disabled) {
-            manageToggle(index, highlightedIndexSig, elemArr);
-            highlightedIndexSig.value = index;
+            manageToggle(index, context.highlightedIndexSig, elemArr);
+            context.highlightedIndexSig.value = index;
             break;
           }
         }
@@ -79,11 +78,11 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
     }
     if (!context.isListboxOpenSig.value && openPopupKeys.includes(e.key)) {
       context.isListboxOpenSig.value = true;
-      if (highlightedIndexSig.value !== -1) {
+      if (context.highlightedIndexSig.value !== -1) {
         return;
       }
       const initalIndex = getIntialIndexOnKey(e.key);
-      manageToggle(await initalIndex, highlightedIndexSig, elemArr);
+      manageToggle(await initalIndex, context.highlightedIndexSig, elemArr);
       return;
     }
     if (context.isListboxOpenSig.value) {
@@ -91,39 +90,39 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
       if (isSingleChar) {
         const posIndex = await singleCharSearch(e.key, deltaIndexSig, elemArr);
         if (posIndex !== -1) {
-          manageToggle(posIndex, highlightedIndexSig, elemArr);
+          manageToggle(posIndex, context.highlightedIndexSig, elemArr);
           return;
         }
         return;
       }
       if (e.key === "ArrowDown") {
         const nextIndex = getNextEnabledOptionIndexFromDisabledArr(
-          highlightedIndexSig.value,
+          context.highlightedIndexSig.value,
           disabledArr,
         );
-        manageToggle(await nextIndex, highlightedIndexSig, elemArr);
+        manageToggle(await nextIndex, context.highlightedIndexSig, elemArr);
         return;
       }
       if (e.key === "ArrowUp") {
-        if (highlightedIndexSig.value === -1) {
+        if (context.highlightedIndexSig.value === -1) {
           const initalIndex = getIntialIndexOnKey(e.key);
-          manageToggle(await initalIndex, highlightedIndexSig, elemArr);
+          manageToggle(await initalIndex, context.highlightedIndexSig, elemArr);
           return;
         }
         const nextIndex = getPrevEnabledOptionIndexFromDisabledArr(
-          highlightedIndexSig.value,
+          context.highlightedIndexSig.value,
           disabledArr,
         );
-        manageToggle(await nextIndex, highlightedIndexSig, elemArr);
+        manageToggle(await nextIndex, context.highlightedIndexSig, elemArr);
         return;
       }
       if (e.key === "Enter") {
-        setTriggerText(highlightedIndexSig, elemArr);
+        setTriggerText(context.highlightedIndexSig, elemArr);
         return;
       }
       if (e.key === "Home") {
         const firstOpt = disabledArr.findIndex((e) => e.disabled === false);
-        manageToggle(firstOpt, highlightedIndexSig, elemArr);
+        manageToggle(firstOpt, context.highlightedIndexSig, elemArr);
         return;
       }
       if (e.key === "End") {
@@ -131,8 +130,8 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
         for (let index = disabledArr.length - 1; index > -1; index--) {
           const elementStatus = disabledArr[index];
           if (!elementStatus.disabled) {
-            manageToggle(index, highlightedIndexSig, elemArr);
-            highlightedIndexSig.value = index;
+            manageToggle(index, context.highlightedIndexSig, elemArr);
+            context.highlightedIndexSig.value = index;
             break;
           }
         }
@@ -140,7 +139,9 @@ export const SelectTrigger = component$<SelectTriggerProps>((props) => {
       }
       if (e.key === "Tab") {
         const tabIndex =
-          highlightedIndexSig.value === -1 ? 0 : highlightedIndexSig.value;
+          context.highlightedIndexSig.value === -1
+            ? 0
+            : context.highlightedIndexSig.value;
         setTriggerText({ value: tabIndex }, elemArr);
         context.isListboxOpenSig.value = false;
         return;

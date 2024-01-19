@@ -1,29 +1,22 @@
 import { $, component$, useSignal, useTask$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
-import { isBrowser } from "@builder.io/qwik/build";
 import { SelectListbox } from "~/components/select/select-listbox";
 import { SelectOption } from "~/components/select/select-option";
 import { SelectTrigger } from "~/components/select/select-trigger";
 import { Select } from "~/components/select/select-inline";
 
-const mockUsers = ["Tim", "Ryan", "Jim"];
-
-const moreUsers = ["Carla", "Rachel", "Monica", "Jessie", "Abby"];
-
 export default component$(() => {
+  const mockUsers = ["Tim", "Ryan", "Jim"];
+  const moreUsers = ["Carla", "Rachel", "Monica", "Jessie", "Abby"];
+
   const usersSig = useSignal<string[]>([]);
-  const addMoreUsersSig = useSignal<boolean>(false);
 
   useTask$(async () => {
     usersSig.value = mockUsers;
   });
 
-  useTask$(async ({ track }) => {
-    track(() => addMoreUsersSig.value);
-
-    if (isBrowser) {
-      usersSig.value = [...usersSig.value, ...moreUsers];
-    }
+  const handleClick$ = $(() => {
+    usersSig.value = [...usersSig.value, ...moreUsers];
   });
 
   return (
@@ -38,9 +31,8 @@ export default component$(() => {
           ))}
         </SelectListbox>
       </Select>
-      <button onClick$={$(() => (addMoreUsersSig.value = true))}>
-        Add more!
-      </button>
+      {/* somehow this adds more js on page load? / wakes up the framework? */}
+      <button onClick$={handleClick$}>Add more!</button>
     </div>
   );
 });

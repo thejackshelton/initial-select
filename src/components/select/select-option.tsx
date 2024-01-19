@@ -18,13 +18,8 @@ export const SelectOption = component$<SelectOptionProps>((props) => {
   const { index, ...rest } = props;
 
   const context = useContext(SelectContextId);
-  const localIndexSig = useSignal<number | null>(null);
   const optionRef = useSignal<HTMLLIElement>();
-  const handleClick$ = $(() => {
-    context.selectedIndexSig.value = localIndexSig.value;
-    context.isListboxOpenSig.value = false;
-  });
-
+  const localIndexSig = useSignal<number | null>(null);
   useTask$(function getIndexTask() {
     if (index === undefined)
       throw Error(
@@ -35,6 +30,15 @@ export const SelectOption = component$<SelectOptionProps>((props) => {
 
     context.optionRefsArray.value[index] = optionRef;
   });
+
+  const handleClick$ = $(() => {
+    context.selectedIndexSig.value = localIndexSig.value;
+    context.isListboxOpenSig.value = false;
+  });
+
+  // const handlePointerOver$ = $(() => {
+  //   context.highlightedIndexSig.value = localIndexSig.value;
+  // });
 
   return (
     <li

@@ -5,10 +5,11 @@ export type SelectContext = {
   triggerRef: Signal<HTMLButtonElement | undefined>;
   popoverRef: Signal<HTMLElement | undefined>;
   listboxRef: Signal<HTMLUListElement | undefined>;
-  selectedOptionRef: Signal<HTMLLIElement | null>;
-  // core state
   optionRefsArray: Signal<Array<Signal<HTMLLIElement | undefined>>>;
-  optionElementsSig: Signal<Array<HTMLLIElement> | null>;
+  selectedOptionRef: Signal<HTMLLIElement | null>;
+
+  // core state
+  highlightedIndexSig: Signal<number>;
   isListboxOpenSig: Signal<boolean>;
   selectedIndexSig: Signal<number | null>;
 };
