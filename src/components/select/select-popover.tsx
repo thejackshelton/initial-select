@@ -7,7 +7,7 @@ import {
 } from "@builder.io/qwik";
 import { Popover, usePopover } from "../popover";
 
-import SelectContextId from "./select-context-id";
+import SelectContextId from "./select-context";
 import { type FloatingProps } from "../popover/floating";
 import { type PopoverImplProps } from "../popover/popover-impl";
 import { isServer } from "@builder.io/qwik/build";
@@ -44,5 +44,5 @@ export const SelectPopover = component$(
         <Slot />
       </Popover>
     );
-  }
+  },
 );

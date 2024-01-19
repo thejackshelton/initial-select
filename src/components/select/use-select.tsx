@@ -1,5 +1,5 @@
 import { $, useContext, type Signal } from "@builder.io/qwik";
-import SelectContextId from "./select-context-id";
+import SelectContextId from "./select-context";
 
 export function useSelect() {
   const context = useContext(SelectContextId);
@@ -93,10 +93,7 @@ export function useSelect() {
   );
 
   const setTriggerText = $(
-    (
-      indexSig: Signal<number>,
-      elemArr: (HTMLLIElement | undefined)[],
-    ) => {
+    (indexSig: Signal<number>, elemArr: (HTMLLIElement | undefined)[]) => {
       const highlightElem = elemArr[indexSig.value];
       const strg = highlightElem!.innerText;
       context.triggerRef.value!.innerText = strg;

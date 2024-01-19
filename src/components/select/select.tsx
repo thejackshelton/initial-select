@@ -7,8 +7,8 @@ import {
   type Signal,
   useTask$,
 } from "@builder.io/qwik";
-import { type SelectContext } from "./select-context.type";
-import SelectContextId from "./select-context-id";
+import { type SelectContext } from "./select-context";
+import SelectContextId from "./select-context";
 
 export type SelectProps = PropsOf<"div">;
 

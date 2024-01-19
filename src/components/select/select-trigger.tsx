@@ -8,7 +8,7 @@ import {
   useSignal,
 } from "@builder.io/qwik";
 import { useSelect } from "./use-select";
-import SelectContextId from "./select-context-id";
+import SelectContextId from "./select-context";
 
 type SelectTriggerProps = PropsOf<"button">;
 export type DisabledArr = Array<{ disabled: boolean }>;

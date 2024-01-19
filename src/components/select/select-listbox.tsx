@@ -1,5 +1,5 @@
 import { component$, Slot, type PropsOf, useContext } from "@builder.io/qwik";
-import SelectContextId from "./select-context-id";
+import SelectContextId from "./select-context";
 
 type SelectListboxProps = PropsOf<"ul">;
 

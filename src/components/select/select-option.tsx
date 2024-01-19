@@ -7,7 +7,7 @@ import {
   useSignal,
   $,
 } from "@builder.io/qwik";
-import SelectContextId from "./select-context-id";
+import SelectContextId from "./select-context";
 
 type SelectOptionProps = PropsOf<"li"> & {
   index?: number;

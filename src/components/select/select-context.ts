@@ -1,5 +1,12 @@
 import { type Signal } from "@builder.io/qwik";
 
+import { createContextId } from "@builder.io/qwik";
+
+const SelectContextId = createContextId<SelectContext>("Select");
+
+export default SelectContextId;
+
+
 export type SelectContext = {
   // refs
   triggerRef: Signal<HTMLButtonElement | undefined>;
